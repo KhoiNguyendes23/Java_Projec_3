@@ -1,0 +1,7 @@
+# Bỏ qua tất cả mọi thứ mặc định
+/*
+
+# CHỈ CHO PHÉP giữ lại file pom.xml và thư mục src
+!pom.xml
+!src/
+!.gitignore
