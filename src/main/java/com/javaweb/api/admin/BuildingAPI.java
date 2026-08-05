@@ -6,7 +6,9 @@ import com.javaweb.model.response.ResponseDTO;
 import com.javaweb.service.IBuildingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController(value = "buildingAPIOfAdmin")
@@ -14,15 +16,23 @@ import java.util.List;
 public class BuildingAPI {
     @Autowired
     private IBuildingService buildingService;
-    @PostMapping
-    public BuildingDTO addOrUpdateBuilding(@RequestBody BuildingDTO buildingDTO){
-        return buildingDTO;
+    // Trong BuildingAPI, lấy real path
+    @PostMapping(consumes = "multipart/form-data")
+    public BuildingDTO addOrUpdateBuilding(
+            BuildingDTO buildingDTO,
+            @RequestParam(value = "avatar", required = false) MultipartFile avatarFile,
+            HttpServletRequest request) {
+
+        String uploadDir = request.getServletContext().getRealPath("/static/images/");
+        return buildingService.save(buildingDTO, avatarFile, uploadDir);
     }
-    @DeleteMapping("/{ids}")
+
+
+    @DeleteMapping
     public void deleteBuilding(@RequestBody List<Long>ids){
         //Xuống DB để xoá building theo danh sach id gui về
 
-        System.out.println("ok");
+       buildingService.deleteBuilding(ids);
     }
     @GetMapping("/{id}/staffs")
     public ResponseDTO loadstaffs(@PathVariable Long id){
@@ -31,6 +41,6 @@ public class BuildingAPI {
     }
     @PostMapping("/assignment")
     public void updateAssignmentBuilding(@RequestBody AssignmentBuildingDTO assignmentBuildingDTO){
-        System.out.println("ok");
+        buildingService.updateAssignment(assignmentBuildingDTO);
     }
 }

@@ -49,10 +49,8 @@
                             <div class="col-xs-2">
                                 <form:select class="form-control" path="district">
                                     <form:option value="">---Chọn Quận---</form:option>
-                                    <form:option value="Quan_1">Quận 1</form:option>
-                                    <form:option value="Quan_2">Quận 2</form:option>
-                                    <form:option value="Quan_3">Quận 3</form:option>
-                                    <form:option value="Quan_10">Quận 10</form:option>
+                                    <form:options items="${districts}"/>
+
                                 </form:select>
                             </div>
                         </div>
@@ -215,13 +213,13 @@
                             <label class="col-xs-3">Loại toà nhà</label>
                             <div class="col-xs-9">
                                 <label class="checkbox-inline">
-                                    <form:checkbox path="typeCode" value="noi-that"/>Nội thất
+                                    <form:checkbox path="typeCode" value="NOI_THAT"/>Nội thất
                                 </label>
                                 <label class="checkbox-inline">
-                                    <form:checkbox path="typeCode" value="tang-tret"/>Tầng Trệt
+                                    <form:checkbox path="typeCode" value="TANG_TRET"/>Tầng Trệt
                                 </label>
                                 <label class="checkbox-inline">
-                                    <form:checkbox path="typeCode" value="nguyen-can"/>Nguyên Căn
+                                   <form:checkbox path="typeCode" value="NGUYEN_CAN"/>Nguyên Căn
                                 </label>
                             </div>
                         </div>
@@ -232,11 +230,17 @@
                                 <form:input class="form-control" path="note"/>
                             </div>
                         </div>
+                        <div class="form-group">
+    <label class="col-xs-3">Ảnh toà nhà</label>
+    <div class="col-xs-9">
+        <input type="file" id="avatar" name="avatar" accept="image/*" class="form-control"/>
+    </div>
+</div>
 
                         <div class="form-group">
                             <div class="col-xs-offset-3 col-xs-9">
                             <c:if test="${not empty buildingEdit.id}">
-                             <button type="submit" class="btn btn-primary" id="btnAddOrUpdateBuilding">
+                             <button type="button" class="btn btn-primary" id="btnAddOrUpdateBuilding">
                                     Cập nhật toà nhà
                                 </button>
                                 <a href="/admin/building-list" class="btn btn-default" id="btnCancel">
@@ -244,7 +248,7 @@
                                 </a>
                             </c:if>
                              <c:if test="${ empty buildingEdit.id}">
-                             <button type="submit" class="btn btn-primary" id="btnAddBuilding">
+                             <button type="button" class="btn btn-primary" id="btnAddBuilding">
                                     Thêm mới toà nhà
                              </button>
                                 <a href="/admin/building-list" class="btn btn-default" id="btnCancel">
@@ -263,7 +267,7 @@
 </div><%-- /.main-content --%>
 
 <script>
-    $('#btnAddOrUpdateBuilding').click(function () {
+    $('#btnAddOrUpdateBuilding,#btnAddBuilding').click(function () {
         var data = {};
         var typeCode = [];
         var formData = $('#formEdit').serializeArray();
@@ -280,25 +284,45 @@
         if(typeCode!=''){
             addOrUpdateBuidling(data);
         }else {
-            window.location.href = "<c:url value=" /admin/building-edit?typeCode=require" />";
+            window.location.href = '/admin/building-edit?typeCode=require';
+
         }
     });
-    function addOrUpdateBuidling(data) {
-        $.ajax({
-            type: "POST",
-            url: "${buildingAPI}",
-            data: JSON.stringify(data),
-            contentType: "application/json",
-            dataType: "JSON",
-            success: function (respond) {
-                console.log("Sucees");
-            },
-            error: function (respond) {
-                console.log("Fail");
-                console.log(respond);
-            }
-        });
+   function addOrUpdateBuidling(data) {
+    var formData = new FormData();
+
+    // Append từng field vào FormData
+    $.each(data, function(key, value) {
+        if (key === 'typeCode') {
+            $.each(value, function(i, v) {
+                formData.append('typeCode', v);
+            });
+        } else if (key !== 'avatar') {  // bỏ qua avatar string từ DTO
+            formData.append(key, value);
+        }
+    });
+
+    // Append file nếu có
+    var avatarFile = $('#avatar')[0].files[0];
+    if (avatarFile) {
+        formData.append('avatar', avatarFile);
     }
+
+    $.ajax({
+        type: "POST",
+        url: "${buildingAPI}",
+        data: formData,
+        processData: false,   // quan trọng - không để jQuery xử lý data
+        contentType: false,   // quan trọng - để browser tự set multipart boundary
+        success: function(respond) {
+            window.location.href = "/admin/building-list";
+        },
+        error: function(respond) {
+            console.log("Fail");
+        }
+    });
+}
+
 
 
 

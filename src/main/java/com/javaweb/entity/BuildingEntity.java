@@ -24,10 +24,10 @@ public class BuildingEntity extends BaseEntity {
     private String structure;
 
     @Column(name = "numberofbasement")
-    private Integer numberOfBasement;
+    private Long numberOfBasement;
 
     @Column(name = "floorarea")
-    private Integer floorArea;
+    private Long floorArea;
 
     @Column(name = "direction")
     private String direction;
@@ -36,7 +36,7 @@ public class BuildingEntity extends BaseEntity {
     private String level;
 
     @Column(name = "rentprice")
-    private Integer rentPrice;
+    private Long rentPrice;
 
     @Column(name = "rentpricedescription")
     private String rentPriceDescription;
@@ -72,7 +72,7 @@ public class BuildingEntity extends BaseEntity {
     private String decorationTime;
 
     @Column(name = "brokeragefee")
-    private Integer brokerageFee;
+    private Double brokerageFee;
 
     @Column(name = "type")
     private String typeCode; // Lưu các loại như TANG_TRET, NGUYEN_CAN...
@@ -134,11 +134,11 @@ public class BuildingEntity extends BaseEntity {
     public String getStructure() { return structure; }
     public void setStructure(String structure) { this.structure = structure; }
 
-    public Integer getNumberOfBasement() { return numberOfBasement; }
-    public void setNumberOfBasement(Integer numberOfBasement) { this.numberOfBasement = numberOfBasement; }
+    public Long getNumberOfBasement() { return numberOfBasement; }
+    public void setNumberOfBasement(Long numberOfBasement) { this.numberOfBasement = numberOfBasement; }
 
-    public Integer getFloorArea() { return floorArea; }
-    public void setFloorArea(Integer floorArea) { this.floorArea = floorArea; }
+    public Long getFloorArea() { return floorArea; }
+    public void setFloorArea(Long floorArea) { this.floorArea = floorArea; }
 
     public String getDirection() { return direction; }
     public void setDirection(String direction) { this.direction = direction; }
@@ -146,8 +146,8 @@ public class BuildingEntity extends BaseEntity {
     public String getLevel() { return level; }
     public void setLevel(String level) { this.level = level; }
 
-    public Integer getRentPrice() { return rentPrice; }
-    public void setRentPrice(Integer rentPrice) { this.rentPrice = rentPrice; }
+    public Long getRentPrice() { return rentPrice; }
+    public void setRentPrice(Long rentPrice) { this.rentPrice = rentPrice; }
 
     public String getRentPriceDescription() { return rentPriceDescription; }
     public void setRentPriceDescription(String rentPriceDescription) { this.rentPriceDescription = rentPriceDescription; }
@@ -182,8 +182,8 @@ public class BuildingEntity extends BaseEntity {
     public String getDecorationTime() { return decorationTime; }
     public void setDecorationTime(String decorationTime) { this.decorationTime = decorationTime; }
 
-    public Integer getBrokerageFee() { return brokerageFee; }
-    public void setBrokerageFee(Integer brokerageFee) { this.brokerageFee = brokerageFee; }
+    public Double getBrokerageFee() { return brokerageFee; }
+    public void setBrokerageFee(Double brokerageFee) { this.brokerageFee = brokerageFee; }
 
     public String getTypeCode() { return typeCode; }
     public void setTypeCode(String typeCode) { this.typeCode = typeCode; }

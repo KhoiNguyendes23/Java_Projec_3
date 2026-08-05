@@ -205,6 +205,7 @@
                         <th>D.Tích Sàn</th>
                         <th>D.Tích Trống</th>
                         <th>D.Tích Thuê</th>
+                        <th>Phí Dịch Vụ</th>
                         <th>Phí Môi Giới</th>
                         <th>Thao Tác</th>
                     </tr>
@@ -226,6 +227,7 @@
                         <td>${item.floorArea}</td>
                         <td>${item.emptyArea}</td>
                         <td>${item.rentArea}</td>
+                        <td>${item.serviceFee}</td>
                         <td>${item.brokerageFee}</td>
                         <td>
                             <div class="hidden-sm hidden-xs btn-group">
@@ -246,8 +248,18 @@
 
                     </tbody>
                 </table>
+                <div class="text-center" style="margin-top: 15px;">
+    <c:forEach begin="1" end="${totalPages}" var="i">
+        <a href="/admin/building-list?page=${i}"
+           class="btn btn-sm ${i == currentPage ? 'btn-primary' : 'btn-default'}">
+            ${i}
+        </a>
+    </c:forEach>
+</div>
+
             </div>
             <%-- /Bảng danh sách --%>
+
 
         </div><%-- /.page-content --%>
     </div>
@@ -322,21 +334,23 @@
             return $(this).val();
         }).get();
         data['staffs'] = staffs;
-        if(data['staffs']!=''){
+
             assignment(data)
-        }
-        console.log("OK");
+
+
     });
    function assignment(data){
     $.ajax({
-        url: "${buildingAPI}/" + 'assigment',
+        url: "${buildingAPI}/assignment",
         type: "POST",
         data: JSON.stringify(data),
         contentType: "application/json",
         dataType: 'json',
         success: function (response) {
-            console.info("Success");
-        },
+    alert("Giao toà nhà thành công!");
+    $('#assignmentbuildingModal').modal('hide');  // đóng modal
+}
+,
         error: function(response){
             console.info("Giao Không Thành Công!")
             window.location.href = "<c:url value='/admin/building-list?message=erro'/>";
@@ -364,20 +378,33 @@
     });
     function deleteBuildings(data){
         $.ajax({
-            type: "Delete",
-            url: "${buildingAPI}/" + data,
+            type: "DELETE",
+            url: "${buildingAPI}",
             data: JSON.stringify(data),
             contentType: "application/json",
-            dataType: "JSON",
             success: function (respond) {
-                console.log("Sucees");
+                alert("Xóa thành công!");
+                window.location.reload();
             },
             error: function (respond) {
-                console.log("Fail");
+                alert("Xóa thất bại: " + respond.status + " " + respond.statusText);
                 console.log(respond);
             }
         })
      }
+     // Tích/bỏ tất cả checkbox
+$('thead input[type=checkbox]').click(function () {
+    var checked = $(this).is(':checked');
+    $('tbody input[type=checkbox]').prop('checked', checked);
+});
+
+// Khi bỏ tích 1 dòng → bỏ tích checkbox header
+$('tbody').on('change', 'input[type=checkbox]', function () {
+    var allChecked = $('tbody input[type=checkbox]').length ===
+                     $('tbody input[type=checkbox]:checked').length;
+    $('thead input[type=checkbox]').prop('checked', allChecked);
+});
+
 </script>
 
 </body>

@@ -21,7 +21,26 @@ public class BuildingSearchRequest extends AbstractDTO {
     private String managerPhone;
     private Long staffId;
     private List<String> typeCode;
+    private int page=1;
+    private int pageSize = 6;
 
+    @Override
+    public int getPage() {
+        return page;
+    }
+
+    @Override
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
 
     public String getName() {
         return name;
