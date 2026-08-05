@@ -220,7 +220,7 @@ public class BuildingService implements IBuildingService {
     @Transactional
     public void deleteBuilding(List<Long> ids) {
         for (Long id : ids) {
-            rentAreaRepository.deleteByBuildingEntity_Id(id);
+
             buildingRepository.deleteById(id);
         }
     }
