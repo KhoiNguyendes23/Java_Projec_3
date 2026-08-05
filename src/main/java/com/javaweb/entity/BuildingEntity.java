@@ -99,24 +99,20 @@ public class BuildingEntity extends BaseEntity {
     // Quan hệ 1-N tới RentAreaEntity (bảng rentarea)
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "buildingEntity")
     private List<RentAreaEntity> rentAreaEntities = new ArrayList<>();
-    // QUAN HỆ NHIỀU - NHIỀU ĐƯỢC THAY THẾ Ở ĐÂY
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "assignmentbuilding",
-            joinColumns = @JoinColumn(name = "buildingid", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "staffid", nullable = false))
-    private List<UserEntity> userEntities = new ArrayList<>();
-//    // Quan hệ 1-N tới AssignBuildingEntity (bảng assignmentbuilding)
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "buildingEntity")
-//    private List<AssignBuildingEntity> assignBuildingEntities = new ArrayList<>();
+
+    // Quan hệ 1-N tới AssignBuildingEntity (bảng assignmentbuilding)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "buildingEntity")
+    private List<AssignBuildingEntity> assignBuildingEntities = new ArrayList<>();
 
     // --- GETTERS AND SETTERS ---
 
-    public List<UserEntity> getUserEntities() {
-        return userEntities;
+
+    public List<AssignBuildingEntity> getAssignBuildingEntities() {
+        return assignBuildingEntities;
     }
 
-    public void setUserEntities(List<UserEntity> userEntities) {
-        this.userEntities = userEntities;
+    public void setAssignBuildingEntities(List<AssignBuildingEntity> assignBuildingEntities) {
+        this.assignBuildingEntities = assignBuildingEntities;
     }
 
     public String getName() { return name; }
