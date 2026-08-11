@@ -97,7 +97,7 @@ public class BuildingEntity extends BaseEntity {
 
 
     // Quan hệ 1-N tới RentAreaEntity (bảng rentarea)
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "buildingEntity", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "buildingEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RentAreaEntity> rentAreaEntities = new ArrayList<>();
     // QUAN HỆ NHIỀU - NHIỀU ĐƯỢC THAY THẾ Ở ĐÂY
     @ManyToMany(fetch = FetchType.LAZY)

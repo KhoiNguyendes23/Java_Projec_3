@@ -84,6 +84,7 @@ public class BuildingService implements IBuildingService {
     }
 
     @Override
+    @Transactional
     public BuildingDTO save(BuildingDTO dto, MultipartFile avatarFile, String upLoadDir) {
         BuildingEntity entity ;
 
@@ -149,6 +150,22 @@ public class BuildingService implements IBuildingService {
         if (dto.getTypeCode() != null && !dto.getTypeCode().isEmpty()) {
             entity.setTypeCode(String.join(",", dto.getTypeCode()));
         }
+
+        // --- 5. Xử lý rentArea: "50,100,200" -> List<RentAreaEntity> ---
+        entity.getRentAreaEntities().clear();
+        if (dto.getRentArea() != null && !dto.getRentArea().trim().isEmpty()) {
+            String[] areas = dto.getRentArea().split(",");
+            for (String area : areas) {
+                area = area.trim();
+                if (!area.isEmpty()) {
+                    RentAreaEntity rentAreaEntity = new RentAreaEntity();
+                    rentAreaEntity.setValue(Integer.valueOf(area));
+                    rentAreaEntity.setBuildingEntity(entity);
+                    entity.getRentAreaEntities().add(rentAreaEntity);
+                }
+            }
+        }
+
         if (avatarFile != null && !avatarFile.isEmpty()) {
             String fileName = System.currentTimeMillis() + "_" + avatarFile.getOriginalFilename();
             // Bỏ dòng: String uploadDir = "src/main/webapp/static/images/";
@@ -167,6 +184,7 @@ public class BuildingService implements IBuildingService {
 
             entity.setAvatar("/static/images/" + fileName);
         }
+
 
 
 
@@ -211,6 +229,14 @@ public class BuildingService implements IBuildingService {
         // typeCode: "tang-tret,nguyen-can" -> List<String>
         if (entity.getTypeCode() != null && !entity.getTypeCode().isEmpty()) {
             dto.setTypeCode(Arrays.asList(entity.getTypeCode().split(",")));
+        }
+        // Load rentArea từ entity -> DTO
+        List<RentAreaEntity> rentAreas = entity.getRentAreaEntities();
+        if (rentAreas != null && !rentAreas.isEmpty()) {
+            String rentArea = rentAreas.stream()
+                    .map(r -> String.valueOf(r.getValue()))
+                    .collect(Collectors.joining(","));
+            dto.setRentArea(rentArea);
         }
 
         return dto;
